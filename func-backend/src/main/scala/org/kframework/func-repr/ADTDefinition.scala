@@ -1,12 +1,10 @@
 package org.kframework.func-repr
 
+sealed abstract class InternalType
+case class Hom(x : InternalType, y : InternalType) extends InternalType
+case class Product(x : InternalType, y : InternalType) extends InternalType
+case class Coproduct(x : InternalType, y : InternalType) extends InternalType
 
-case class TypeName( tname : String )
-
-// Aliased for clarity.
-case class ConstructorName( cname : String )
-case class ConstructorArg( tn : TypeName )
-case class ConstructorArgs( args : List[ConstructorArg])
-
-case class Constructor( name : ConstructorName, args : ConstructorArgs)
-case class ADTDefinition( constructors : List[Constructor])
+sealed abstract class PolynomialFunctor
+case class Const( t : InternalType ) extends PolynomialFunctor
+case class Horner(t : InternalType, p : Polynomialfunctor) extends PolynomialFunctor
