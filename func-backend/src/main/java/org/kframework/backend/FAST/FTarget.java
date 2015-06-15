@@ -14,11 +14,15 @@ public abstract class FTarget {
     public abstract String unparse(FLitString s);
     public abstract String unparse(FVariable v);
     public abstract String unparse(FMatch m);
+    public abstract String unparse(FSwitch s);
+    public abstract String unparse(FTypeVar t);
 
     public abstract String newFConstructorName();
     public abstract String newFTypeName();
     public abstract String newFVariable();
 
-    public abstract String declare(FDeclarable a);
+    public abstract void declare(FFunctionDefinition a);
+    public abstract void declare(FADT a);
+    public abstract String getDeclarations();
 
 }
