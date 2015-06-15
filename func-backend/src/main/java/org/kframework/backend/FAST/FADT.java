@@ -3,8 +3,7 @@ package org.kframework.backend.FAST;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.stream.Collectors;
 
 /**
  * @author: Sebastian Conybeare
@@ -15,18 +14,14 @@ public class FADT extends TypeFExp {
     private final FTypeName name;
 
     public FADT(ImmutableList<FArgumentSignature> argSigs, FTarget target) {
-        int size = argSigs.size();
-        ArrayList<FConstructor> constructorArr = new ArrayList<FConstructor>(size);
 
-        Iterator<FArgumentSignature> argSigIter = argSigs.iterator();
-
-        for(FConstructor currCon : constructorArr) {
-            FConstructorSignature currConSig = new FConstructorSignature(argSigIter.next(), this);
-            currCon = new FConstructor(currConSig, target);
-        }
+        constructors = argSigs.stream()
+            .map(argSig -> new FConstructorSignature(argSig, this))
+            .map(conSig -> new FConstructor(conSig, target))
+            .collect(Collectors.collectingAndThen(Collectors.toList(), ImmutableList::copyOf));
         
-        constructors = ImmutableList.copyOf(constructorArr);
         name = new FTypeName(target);
+
     }
 
     public ImmutableList<FConstructor> getFConstructors() {
