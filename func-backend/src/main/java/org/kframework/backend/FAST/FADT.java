@@ -13,12 +13,13 @@ public class FADT extends TypeFExp {
     private final ImmutableList<FConstructor> constructors;
     private final FTypeName name;
 
-    public FADT(ImmutableList<FArgumentSignature> argSigs, FTarget target) {
+    public FADT(FTarget target, ImmutableList<FArgumentSignature> argSigs) {
 
         constructors = argSigs.stream()
             .map(argSig -> new FConstructorSignature(argSig, this))
             .map(conSig -> new FConstructor(conSig, target))
-            .collect(Collectors.collectingAndThen(Collectors.toList(), ImmutableList::copyOf));
+            .collect(Collectors.collectingAndThen(Collectors.toList(),
+                                                  ImmutableList::copyOf));
         
         name = new FTypeName(target);
 
