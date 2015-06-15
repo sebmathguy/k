@@ -8,17 +8,17 @@ import com.google.common.collect.ImmutableList;
  */
 public class FArgumentSignature {
 
-    private final ImmutableList<TypeFExp> argTypes;
+    private final ImmutableList<FTypeVar> argTypes;
 
-    public FArgumentSignature(ImmutableList<TypeFExp> argumentTypes) {
+    public FArgumentSignature(ImmutableList<FTypeVar> argumentTypes) {
         argTypes = argumentTypes;
     }
 
-    public FArgumentSignature(TypeFExp argumentType) {
+    public FArgumentSignature(FTypeVar argumentType) {
         argTypes = ImmutableList.of(argumentType);
     }
 
-    public ImmutableList<TypeFExp> getArgumentTypes() {
+    public ImmutableList<FTypeVar> getArgumentTypes() {
         return argTypes;
     }
 

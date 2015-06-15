@@ -6,14 +6,14 @@ package org.kframework.backend.FAST;
  */
 public class FFunctionDefinition extends FDeclarable {
 
-    private final TypeFExp domain;
-    private final TypeFExp codomain;
+    private final FTypeVar domain;
+    private final FTypeVar codomain;
     private final FMatch cases;
     private final FVariable func;
 
     public FFunctionDefinition(FTarget  target,
-                               TypeFExp domain,
-                               TypeFExp codomain,
+                               FTypeVar domain,
+                               FTypeVar codomain,
                                FMatch   cases) {
         super(target);
         this.domain = domain;
@@ -22,11 +22,11 @@ public class FFunctionDefinition extends FDeclarable {
         func = new FVariable(target);
     }
 
-    public TypeFExp getDomain() {
+    public FTypeVar getDomain() {
         return domain;
     }
 
-    public TypeFExp getCodomain() {
+    public FTypeVar getCodomain() {
         return codomain;
     }
 
@@ -38,8 +38,8 @@ public class FFunctionDefinition extends FDeclarable {
         return func;
     }
 
-    public String declare() {
-        return target.declare(this);
+    public void declare() {
+        target.declare(this);
     }
 
 }

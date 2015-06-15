@@ -8,7 +8,7 @@ public abstract class HaskellFTarget extends FTarget {
     private int constructorNameCount;
     private int typeNameCount;
     private int variableNameCount;
-    private static int catamorphismNameCount = 0;
+    private String declarations;
     
     public HaskellFTarget() {
         constructorNameCount = 0;
@@ -54,11 +54,6 @@ public abstract class HaskellFTarget extends FTarget {
         return v.toString();
     }
 
-    // public String unparse(Catamorphism c) {
-    //     return c.getCatamorphismName().toString();
-    // }
-    
-
     @Override
     public String newFConstructorName() {
         synchronized(this) {
@@ -81,8 +76,25 @@ public abstract class HaskellFTarget extends FTarget {
     }
 
     @Override
-    public String declare(FFunctionDefinition a) {
-        return ""; //TODO declarations
+    public void declare(FFunctionDefinition a) {
+        String f = a.getFFunction().unparse();
+        String dom = a.getDomain().unparse();
+        String codom = a.getCodomain().unparse();
+        String typeSignatureDecl = String.format("%s :: %s -> %s", f, dom, codom);
+        FVariable x = new FVariable(this);
+        FSwitch cases = new FSwitch(this, x, a.getCases());
+        String funcDef = String.format("%s %s = %s",
+                                       f, x.unparse(), cases.unparse());
+        
+        declarations = String.format("%s%s\n%s\n",
+                                     declarations,
+                                     typeSignatureDecl,
+                                     funcDef);
+    }
+
+    @Override
+    public String getDeclarations() {
+        return declarations;
     }
 
 }

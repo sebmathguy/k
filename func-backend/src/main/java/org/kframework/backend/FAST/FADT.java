@@ -8,20 +8,21 @@ import java.util.stream.Collectors;
 /**
  * @author: Sebastian Conybeare
  */
-public class FADT extends TypeFExp {
+public class FADT extends FDeclarable {
 
     private final ImmutableList<FConstructor> constructors;
-    private final FTypeName name;
+    private final FTypeVar type;
 
     public FADT(FTarget target, ImmutableList<FArgumentSignature> argSigs) {
-
-        constructors = argSigs.stream()
-            .map(argSig -> new FConstructorSignature(argSig, this))
+        super(target);
+        type = new FTypeVar(target);
+        constructors = ImmutableList.copyOf(
+            argSigs.stream()
+            .map(argSig -> new FConstructorSignature(argSig, type))
             .map(conSig -> new FConstructor(conSig, target))
-            .collect(Collectors.collectingAndThen(Collectors.toList(),
-                                                  ImmutableList::copyOf));
+            .collect(Collectors.toList())
+            );
         
-        name = new FTypeName(target);
 
     }
 
@@ -29,8 +30,12 @@ public class FADT extends TypeFExp {
         return constructors;
     }
 
-    public FTypeName getName() {
-        return name;
+    public FTypeVar getTypeVar() {
+        return type;
+    }
+
+    @Override
+    public void declare() {
     }
     
 }
