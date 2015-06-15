@@ -80,13 +80,6 @@ public abstract class HaskellFTarget extends FTarget {
         }
     }
 
-    // static String newCatamorphismName() {
-    //     String rawName = String.format("cata%d",
-    //                                    catamorphismNameCount);
-    //     catamorphismNameCount++;
-    //     return rawName;
-    // }
-
     @Override
     public String declare(FDeclarable a) {
         return a.declare(); //TODO declarations
