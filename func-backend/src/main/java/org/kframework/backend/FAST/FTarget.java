@@ -19,6 +19,6 @@ public abstract class FTarget {
     public abstract String newFTypeName();
     public abstract String newFVariable();
 
-    public abstract String declare(FDeclarable a);
+    public abstract String declare(FFunctionDefinition a);
 
 }

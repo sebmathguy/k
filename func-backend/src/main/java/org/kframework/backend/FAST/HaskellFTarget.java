@@ -81,8 +81,8 @@ public abstract class HaskellFTarget extends FTarget {
     }
 
     @Override
-    public String declare(FDeclarable a) {
-        return a.declare(); //TODO declarations
+    public String declare(FFunctionDefinition a) {
+        return ""; //TODO declarations
     }
 
 }
