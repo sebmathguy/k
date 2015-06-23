@@ -1,6 +1,7 @@
 // Copyright (c) 2013-2015 K Team. All Rights Reserved.
 package org.kframework.backend.FAST;
 
+import com.google.common.collect.ImmutableList;
 /**
  * @author: Sebastian Conybeare
  */
@@ -8,13 +9,13 @@ public class FFunctionDefinition extends FDeclarable {
 
     private final FTypeVar domain;
     private final FTypeVar codomain;
-    private final FMatch cases;
+    private final ImmutableList<FPatternBinding> cases;
     private final FVariable func;
 
     public FFunctionDefinition(FTarget  target,
                                FTypeVar domain,
                                FTypeVar codomain,
-                               FMatch   cases) {
+                               ImmutableList<FPatternBinding> cases) {
         super(target);
         this.domain = domain;
         this.codomain = codomain;
@@ -30,7 +31,7 @@ public class FFunctionDefinition extends FDeclarable {
         return codomain;
     }
 
-    public FMatch getCases() {
+    public ImmutableList<FPatternBinding> getCases() {
         return cases;
     }
 

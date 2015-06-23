@@ -13,9 +13,11 @@ public abstract class FTarget {
     public abstract String unparse(FLitInt i);
     public abstract String unparse(FLitString s);
     public abstract String unparse(FVariable v);
-    public abstract String unparse(FMatch m);
     public abstract String unparse(FSwitch s);
     public abstract String unparse(FTypeVar t);
+    public abstract String unparse(VarFPattern p);
+    public abstract String unparse(ConstructorFPattern p);
+    public abstract String unparse(WildcardFPattern p);
 
     public abstract String newFConstructorName();
     public abstract String newFTypeName();

@@ -17,4 +17,9 @@ public class VarFPattern extends FPattern {
         return var;
     }
 
+    @Override
+    public String unparse() {
+        return target.unparse(this);
+    }
+
 }

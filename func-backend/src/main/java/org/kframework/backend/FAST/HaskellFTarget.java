@@ -1,21 +1,30 @@
 // Copyright (c) 2013-2015 K Team. All Rights Reserved.
 package org.kframework.backend.FAST;
 
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
 /**
  * @author: Sebastian Conybeare
  */
-public abstract class HaskellFTarget extends FTarget {
-    private int constructorNameCount;
-    private int typeNameCount;
-    private int variableNameCount;
-    private String declarations;
-    
-    public HaskellFTarget() {
-        constructorNameCount = 0;
-        typeNameCount = 0;
-        variableNameCount = 0;
-    }
+public class HaskellFTarget extends FTarget {
+    private int constructorNameCount = 0;
+    private int typeNameCount = 0;
+    private int variableNameCount = 0;
 
+    private final Object constructorLock = new Object();
+    private final Object typeLock = new Object();
+    private final Object variableLock = new Object();
+
+    private final Object declarationLock = new Object();
+
+    private String typeDeclarations = "";
+    private String functionDeclarations = "";
+    private boolean declarationsValid = false;
+
+    private final HashSet<FADT> newTypes = new HashSet();
+    private final HashSet<FFunctionDefinition> newFunctions = new HashSet();
+    
     @Override
     public String unparse(FApp a) {
         return String.format("(%s) (%s)", a.getFunction().unparse(), a.getArgument().unparse());
@@ -55,46 +64,111 @@ public abstract class HaskellFTarget extends FTarget {
     }
 
     @Override
+    public String unparse(VarFPattern p) {
+        return p.getFVariable().unparse();
+    }
+
+    @Override
+    public String unparse(ConstructorFPattern p) {
+        return String.format("(%s) (%s)",
+                             p.getFConstructor().unparse(),
+                             p.getArgs().stream()
+                             .map(x -> String.format("(%s)", x.unparse()))
+                             .collect(Collectors.joining(" "))
+            );
+    }
+
+    @Override
+    public String unparse(WildcardFPattern p) {
+        return "_";
+    }
+
+    @Override
+    public String unparse(FSwitch s) {
+        return "switch statements not implemented"; //TODO switch statements
+    }
+
+    @Override
+    public String unparse(FTypeVar t) {
+        return t.getName();
+    }
+
+    @Override
     public String newFConstructorName() {
-        synchronized(this) {
+        synchronized(constructorLock) {
             return String.format("Constructor%i", constructorNameCount++);
         }
     }
 
     @Override
     public String newFTypeName() {
-        synchronized(this) {
+        synchronized(typeLock) {
             return String.format("Type%i", typeNameCount++);
         }
     }
 
     @Override
     public String newFVariable() {
-        synchronized(this) {
+        synchronized(variableLock) {
             return String.format("var%i", variableNameCount++);
         }
     }
 
-    @Override
-    public void declare(FFunctionDefinition a) {
+    private String serializeDeclaration(FFunctionDefinition a) {
         String f = a.getFFunction().unparse();
         String dom = a.getDomain().unparse();
         String codom = a.getCodomain().unparse();
         String typeSignatureDecl = String.format("%s :: %s -> %s", f, dom, codom);
-        FVariable x = new FVariable(this);
-        FSwitch cases = new FSwitch(this, x, a.getCases());
-        String funcDef = String.format("%s %s = %s",
-                                       f, x.unparse(), cases.unparse());
-        
-        declarations = String.format("%s%s\n%s\n",
-                                     declarations,
-                                     typeSignatureDecl,
-                                     funcDef);
+//        ImmutableList<FPatternBinding> cases = new FSwitch(this, x, a.getCases());
+        String funcDef = a.getCases().stream()
+            .map(binding -> String.format("%s (%s) = %s", f,
+                                          binding.getLHS().unparse(),
+                                          binding.getRHS().unparse()))
+            .collect(Collectors.joining("\n"));
+        String newDeclaration = String.format("%s\n%s\n",
+                                              typeSignatureDecl,
+                                              funcDef);
+        return newDeclaration;
     }
 
     @Override
-    public String getDeclarations() {
-        return declarations;
+    public void declare(FFunctionDefinition f) {
+        synchronized(declarationLock) {
+            declarationsValid = false;
+            newFunctions.add(f);
+        }
     }
 
+    @Override
+    public void declare(FADT a) {
+        synchronized(declarationLock) {
+            declarationsValid = false;
+            newTypes.add(a);
+        }
+    }
+
+    private String getFunctionDeclarations() {
+        synchronized(declarationLock) {
+            if(declarationsValid) {
+                return functionDeclarations;
+            } else {
+                // TODO add type definitions
+                String newFunctionDeclarations = newFunctions.stream()
+                    .map(f -> serializeDeclaration(f))
+                    .collect(Collectors.joining("\n"));
+                String allFunctionDeclarations = String.format("%s\n%s", functionDeclarations, newFunctionDeclarations);
+                declarationsValid = true;
+                functionDeclarations = allFunctionDeclarations;
+                return functionDeclarations;
+            }
+        }
+    }
+
+    private String getTypeDeclarations() {
+        return "";
+    }
+
+    public String getDeclarations() {
+        return String.format("%s\n%s", getTypeDeclarations(), getFunctionDeclarations());
+    }
 }

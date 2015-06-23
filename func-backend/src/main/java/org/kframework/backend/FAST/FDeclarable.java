@@ -13,6 +13,6 @@ public abstract class FDeclarable extends FASTNode {
         this.target = target;
     }
 
-    public abstract void declare();
+    // public abstract void declare(); TODO figure this out
 
 }

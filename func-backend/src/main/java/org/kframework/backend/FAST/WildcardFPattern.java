@@ -10,4 +10,9 @@ public class WildcardFPattern extends FPattern {
         super(target);
     }
 
+    @Override
+    public String unparse() {
+        return target.unparse(this);
+    }
+
 }

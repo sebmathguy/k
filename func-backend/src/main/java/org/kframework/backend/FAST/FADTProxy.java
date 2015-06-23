@@ -13,17 +13,20 @@ public class FADTProxy extends FADT {
         super(target);
     }
 
+    @Override
     public ImmutableList<FConstructor> getFConstructors() {
         return delegate.getFConstructors();
     }
 
+    @Override
     public FTypeVar getTypeVar() {
         return delegate.getTypeVar();
     }
 
-    public void declare() {
-        delegate.declare();
-    }
+    // @Override // TODO figure this out
+    // public void declare() {
+    //     delegate.declare();
+    // }
 
     public void setDelegate(FADT delegate) {
         this.delegate = delegate;

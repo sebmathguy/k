@@ -22,6 +22,7 @@ public class FADTImpl extends FADT {
             .map(conSig -> new FConstructor(conSig, target))
             .collect(Collectors.toList())
             );
+        target.declare(this);
     }
 
     @Override
@@ -34,8 +35,4 @@ public class FADTImpl extends FADT {
         return type;
     }
 
-    @Override
-    public void declare() {
-    }
-    
 }

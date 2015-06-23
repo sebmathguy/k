@@ -4,7 +4,7 @@ package org.kframework.backend.FAST;
 /**
  * @author: Sebastian Conybeare
  */
-public abstract class FPattern extends FASTNode{
+public abstract class FPattern extends FASTNode {
 
     protected final FTarget target;
 
@@ -13,4 +13,6 @@ public abstract class FPattern extends FASTNode{
         this.target = target;
     }
 
+    abstract String unparse();
+    
 }

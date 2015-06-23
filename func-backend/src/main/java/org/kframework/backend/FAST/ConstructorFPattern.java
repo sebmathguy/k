@@ -5,20 +5,20 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author: Sebastian Conybeare
  */
-public class FConstructorFPattern extends FPattern {
+public class ConstructorFPattern extends FPattern {
 
     protected final FTarget target;
     private final FConstructor constructor;
     private final ImmutableList<FPattern> args;
 
-    public FConstructorFPattern(FTarget target, FConstructor constructor, ImmutableList<FPattern> args) {
+    public ConstructorFPattern(FTarget target, FConstructor constructor, ImmutableList<FPattern> args) {
         super(target);
         this.target = target;
         this.constructor = constructor;
         this.args = args;
     }
 
-    public FConstructorFPattern(FTarget target, FConstructor constructor, FPattern... args) {
+    public ConstructorFPattern(FTarget target, FConstructor constructor, FPattern... args) {
         super(target);
         this.target = target;
         this.constructor = constructor;
@@ -31,6 +31,11 @@ public class FConstructorFPattern extends FPattern {
 
     public ImmutableList<FPattern> getArgs() {
         return args;
+    }
+
+    @Override
+    public String unparse() {
+        return target.unparse(this);
     }
 
 }

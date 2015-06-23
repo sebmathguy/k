@@ -14,6 +14,10 @@ public class FArgumentSignature {
         argTypes = argumentTypes;
     }
 
+    public FArgumentSignature() {
+        argTypes = ImmutableList.of();
+    }
+
     public FArgumentSignature(FTypeVar argumentType) {
         argTypes = ImmutableList.of(argumentType);
     }
