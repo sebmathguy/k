@@ -97,6 +97,11 @@ public class HaskellFTarget extends FTarget {
     }
 
     @Override
+    public String unparse(LiteralFPattern p) {
+        return p.getFExp().unparse();
+    }
+    
+    @Override
     public String newFConstructorName() {
         synchronized(constructorLock) {
             return String.format("Constructor%d", constructorNameCount++);

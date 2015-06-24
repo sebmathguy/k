@@ -18,6 +18,7 @@ public abstract class FTarget {
     public abstract String unparse(VarFPattern p);
     public abstract String unparse(ConstructorFPattern p);
     public abstract String unparse(WildcardFPattern p);
+    public abstract String unparse(LiteralFPattern p);
 
     public abstract String newFConstructorName();
     public abstract String newFTypeName();
