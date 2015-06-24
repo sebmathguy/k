@@ -15,7 +15,7 @@ public class FADTImpl extends FADT {
 
     public FADTImpl(FTarget target, ImmutableList<FArgumentSignature> argSigs) {
         super(target);
-        type = new FTypeVar(target);
+        type = new FTypeVarImpl(target);
         constructors = ImmutableList.copyOf(
             argSigs.stream()
             .map(argSig -> new FConstructorSignature(argSig, type))

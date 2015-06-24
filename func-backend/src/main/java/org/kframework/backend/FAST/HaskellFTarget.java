@@ -16,11 +16,14 @@ public class HaskellFTarget extends FTarget {
     private final Object typeLock = new Object();
     private final Object variableLock = new Object();
 
-    private final Object declarationLock = new Object();
+    private final Object typeDeclarationLock = new Object();
+    private final Object functionDeclarationLock = new Object();
 
     private String typeDeclarations = "";
     private String functionDeclarations = "";
-    private boolean declarationsValid = false;
+    
+    private boolean typeDeclarationsValid = false;
+    private boolean functionDeclarationsValid = false;
 
     private final HashSet<FADT> newTypes = new HashSet();
     private final HashSet<FFunctionDefinition> newFunctions = new HashSet();
@@ -50,7 +53,7 @@ public class HaskellFTarget extends FTarget {
 
     @Override
     public String unparse(FLitInt i) {
-        return String.format("%i", i.getValue());
+        return String.format("%d", i.getValue());
     }
 
     @Override
@@ -96,25 +99,25 @@ public class HaskellFTarget extends FTarget {
     @Override
     public String newFConstructorName() {
         synchronized(constructorLock) {
-            return String.format("Constructor%i", constructorNameCount++);
+            return String.format("Constructor%d", constructorNameCount++);
         }
     }
 
     @Override
     public String newFTypeName() {
         synchronized(typeLock) {
-            return String.format("Type%i", typeNameCount++);
+            return String.format("Type%d", typeNameCount++);
         }
     }
 
     @Override
     public String newFVariable() {
         synchronized(variableLock) {
-            return String.format("var%i", variableNameCount++);
+            return String.format("var%d", variableNameCount++);
         }
     }
 
-    private String serializeDeclaration(FFunctionDefinition a) {
+    private String serializeFunctionDeclaration(FFunctionDefinition a) {
         String f = a.getFFunction().unparse();
         String dom = a.getDomain().unparse();
         String codom = a.getCodomain().unparse();
@@ -131,33 +134,53 @@ public class HaskellFTarget extends FTarget {
         return newDeclaration;
     }
 
+    private String serializeTypeDeclaration(FADT a) {
+            return String.format("data %s = %s",
+                                 a.getTypeVar().getName(),
+                                 a.getFConstructors().stream()
+                                 .map(con ->
+                                      String.format("%s  %s ",
+                                                    con.getFConstructorName().toString(),
+                                                    con
+                                                    .getFConstructorSignature()
+                                                    .getFArgumentSignature()
+                                                    .getArgumentTypes()
+                                                    .stream()
+                                                    .map(t ->
+                                                         t.getName())
+                                                    .collect(Collectors.joining(" "))))
+                                 .collect(Collectors.joining(" | ")));
+    }
+
     @Override
     public void declare(FFunctionDefinition f) {
-        synchronized(declarationLock) {
-            declarationsValid = false;
+        synchronized(functionDeclarationLock) {
+            functionDeclarationsValid = false;
             newFunctions.add(f);
         }
     }
 
     @Override
     public void declare(FADT a) {
-        synchronized(declarationLock) {
-            declarationsValid = false;
+        synchronized(typeDeclarationLock) {
+            typeDeclarationsValid = false;
             newTypes.add(a);
         }
     }
 
     private String getFunctionDeclarations() {
-        synchronized(declarationLock) {
-            if(declarationsValid) {
+        synchronized(functionDeclarationLock) {
+            if(functionDeclarationsValid) {
                 return functionDeclarations;
             } else {
                 // TODO add type definitions
                 String newFunctionDeclarations = newFunctions.stream()
-                    .map(f -> serializeDeclaration(f))
+                    .map(f -> serializeFunctionDeclaration(f))
                     .collect(Collectors.joining("\n"));
-                String allFunctionDeclarations = String.format("%s\n%s", functionDeclarations, newFunctionDeclarations);
-                declarationsValid = true;
+                String allFunctionDeclarations = String.format("%s\n%s",
+                                                               functionDeclarations,
+                                                               newFunctionDeclarations);
+                functionDeclarationsValid = true;
                 functionDeclarations = allFunctionDeclarations;
                 return functionDeclarations;
             }
@@ -165,7 +188,21 @@ public class HaskellFTarget extends FTarget {
     }
 
     private String getTypeDeclarations() {
-        return "";
+        synchronized(typeDeclarationLock) {
+            if(typeDeclarationsValid) {
+                return typeDeclarations;
+            } else {
+                String newTypeDeclarations = newTypes.stream()
+                    .map(t -> serializeTypeDeclaration(t))
+                    .collect(Collectors.joining("\n"));
+                String allTypeDeclarations = String.format("%s\n%s",
+                                                           typeDeclarations,
+                                                           newTypeDeclarations);
+                typeDeclarationsValid = true;
+                typeDeclarations = allTypeDeclarations;
+                return typeDeclarations;
+            }
+        }
     }
 
     public String getDeclarations() {
