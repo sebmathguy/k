@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.stream.Collectors;
 
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class FADTImpl extends FADT {
 

@@ -3,7 +3,7 @@ package org.kframework.backend.FAST;
 
 import com.google.common.collect.ImmutableList;
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class FADTProxy extends FADT {
 

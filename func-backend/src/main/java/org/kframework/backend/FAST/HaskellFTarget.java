@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class HaskellFTarget extends FTarget {
     private int constructorNameCount = 0;
