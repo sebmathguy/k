@@ -144,7 +144,7 @@ public class HaskellFTarget extends FTarget {
                                  a.getTypeVar().getName(),
                                  a.getFConstructors().stream()
                                  .map(con ->
-                                      String.format("%s  %s ",
+                                      String.format("%s %s",
                                                     con.getFConstructorName().toString(),
                                                     con
                                                     .getFConstructorSignature()

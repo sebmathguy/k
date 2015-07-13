@@ -36,7 +36,7 @@ public class FASTExampleADTTest {
         String generatedOutput1 = tgt1.getDeclarations();
 
         assertEquals(generatedOutput, generatedOutput1);
-        Pattern p = Pattern.compile("\\s*data\\s+Type0\\s*=\\sConstructor0\\s+\\|\\s+Constructor1\\s+Type0\\s*");
+        Pattern p = Pattern.compile("data Type0 = Constructor0 | Constructor1 Type0");
         Matcher m = p.matcher(generatedOutput);
         assertTrue(m.find());
         
