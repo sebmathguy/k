@@ -4,6 +4,8 @@ package org.kframework.backend.FAST;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * @author Sebastian Conybeare
  */
@@ -140,21 +142,28 @@ public class HaskellFTarget extends FTarget {
     }
 
     private String serializeTypeDeclaration(FADT a) {
-            return String.format("data %s = %s",
-                                 a.getTypeVar().getName(),
-                                 a.getFConstructors().stream()
-                                 .map(con ->
-                                      String.format("%s %s",
-                                                    con.getFConstructorName().toString(),
-                                                    con
-                                                    .getFConstructorSignature()
-                                                    .getFArgumentSignature()
-                                                    .getArgumentTypes()
-                                                    .stream()
-                                                    .map(t ->
-                                                         t.getName())
-                                                    .collect(Collectors.joining(" "))))
-                                 .collect(Collectors.joining(" | ")));
+        String typeName = a.getTypeVar().getName();
+        return String.format("data %s = %s", typeName,
+                             a.getFConstructors().stream()
+                             .map(this::serializeConstructorDeclaration)
+                             .collect(Collectors.joining(" | ")));
+    }
+
+    private String serializeConstructorDeclaration(FConstructor con) {
+        String constructorName = con.getFConstructorName().toString();
+        FConstructorSignature sig = con.getFConstructorSignature();
+        FArgumentSignature asig = sig.getFArgumentSignature();
+        ImmutableList<FTypeVar> argTypes = asig.getArgumentTypes();
+
+        if(argTypes.isEmpty()) {
+            return constructorName;
+        } else {
+            return String.format("%s %s", constructorName,
+                                 argTypes.stream()
+                                 .map(t -> t.getName())
+                                 .collect( Collectors.joining(" ") )
+                );
+            }
     }
 
     @Override
