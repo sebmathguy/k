@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.hamcrest.core.StringContains;
+// import org.hamcrest.core.StringContains;
 
 import com.google.common.collect.ImmutableList;
 
@@ -20,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class FASTADTTest {
     @Test
     public void testUnit() {
+
         FTarget tgt = new HaskellFTarget();
         FADTProxy nat = new FADTProxy(tgt);
         FTypeVarProxy natTV = new FTypeVarProxy(tgt);
@@ -29,15 +30,12 @@ public class FASTADTTest {
         natTV.setDelegate(nat.getTypeVar());
         String generatedOutput = tgt.getDeclarations();
 
-        StringContains substm = new StringContains(
-            "data Type0 = Constructor0 | Constructor1 Type0");
-        assertThat(generatedOutput, substm);
-        
-        // Pattern p = Pattern.compile("data Type0 = Constructor0 \\| Constructor1 Type0");
-        // Matcher m = p.matcher(generatedOutput);
-        // if(! m.find()) {
-        //     assertEquals("", generatedOutput);
-        // }
+        String subRegex = "[A-Z][\\w']*"; // Matches valid uppercase identifiers
+        String natRegex = String.format(
+            ".*data (%s) = (?!\\1 )(%s) \\| (?!\\1 |\\2 )%s \\1;.*",
+            subRegex, subRegex, subRegex);
+
+        assertThat(generatedOutput, RegexMatcher.matchesRegex(natRegex));
     }
 
 }

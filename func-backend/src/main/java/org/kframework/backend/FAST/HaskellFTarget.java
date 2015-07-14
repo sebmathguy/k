@@ -143,7 +143,7 @@ public class HaskellFTarget extends FTarget {
 
     private String serializeTypeDeclaration(FADT a) {
         String typeName = a.getTypeVar().getName();
-        return String.format("data %s = %s", typeName,
+        return String.format("data %s = %s;", typeName,
                              a.getFConstructors().stream()
                              .map(this::serializeConstructorDeclaration)
                              .collect(Collectors.joining(" | ")));
