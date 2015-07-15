@@ -1,4 +1,6 @@
-package org.kframework.backend.FAST;
+package org.kframework.backend.FAST.unit;
+
+import org.kframework.backend.FAST.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -32,7 +34,7 @@ public class FASTADTTest {
 
         String subRegex = "[A-Z][\\w']*"; // Matches valid uppercase identifiers
         String natRegex = String.format(
-            ".*data (%s) = (?!\\1 )(%s) \\| (?!\\1 |\\2 )%s \\1;.*",
+            "\\s*data (%s) = (?!\\1 )(%s) \\| (?!\\1 |\\2 )%s \\1;\\s*",
             subRegex, subRegex, subRegex);
 
         assertThat(generatedOutput, RegexMatcher.matchesRegex(natRegex));

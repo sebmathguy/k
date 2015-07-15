@@ -1,5 +1,5 @@
 // Copyright (c) 2013-2015 K Team. All Rights Reserved.
-package org.kframework.backend.FAST;
+package org.kframework.backend.FAST.unit;
 
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.Description;
