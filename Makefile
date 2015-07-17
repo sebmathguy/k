@@ -45,3 +45,6 @@ func-test:
 	krun $(TEST_INPUT) --kore; \
 	cd $$OLDDIR; \
 	rm -rf $$TMPDIR
+
+tags:
+	find . -name "*.java" | xargs etags
