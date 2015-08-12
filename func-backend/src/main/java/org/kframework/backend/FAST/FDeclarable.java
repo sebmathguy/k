@@ -2,7 +2,7 @@
 package org.kframework.backend.FAST;
 
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public abstract class FDeclarable extends FASTNode {
 
@@ -13,6 +13,6 @@ public abstract class FDeclarable extends FASTNode {
         this.target = target;
     }
 
-    public abstract String declare();
+    // public abstract void declare(); TODO figure this out
 
 }

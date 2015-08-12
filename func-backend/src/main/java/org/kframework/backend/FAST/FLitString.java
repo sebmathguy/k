@@ -2,7 +2,7 @@
 package org.kframework.backend.FAST;
 
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class FLitString extends FExp {
 

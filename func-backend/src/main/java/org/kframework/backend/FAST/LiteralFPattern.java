@@ -4,22 +4,22 @@ package org.kframework.backend.FAST;
 /**
  * @author Sebastian Conybeare
  */
-public class VarFPattern extends FPattern {
+public class LiteralFPattern extends FPattern {
 
-    private final FVariable var;
+    private final FExp e;
 
-    public VarFPattern(FTarget target) {
+    public LiteralFPattern(FTarget target, FExp e) {
         super(target);
-        var = new FVariable(target);
+        this.e = e;
     }
 
-    public FVariable getFVariable() {
-        return var;
+    public FExp getFExp() {
+        return e;
     }
 
     @Override
     public String unparse() {
         return target.unparse(this);
     }
-
+    
 }

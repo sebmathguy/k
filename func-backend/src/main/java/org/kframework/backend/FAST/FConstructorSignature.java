@@ -3,24 +3,24 @@ package org.kframework.backend.FAST;
 
 import com.google.common.collect.ImmutableList;
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class FConstructorSignature {
 
     private final FArgumentSignature argTypes;
-    private TypeFExp retType;
+    private FTypeVar retType;
 
-    public FConstructorSignature(FArgumentSignature argumentTypes, TypeFExp returnType) {
+    public FConstructorSignature(FArgumentSignature argumentTypes, FTypeVar returnType) {
         argTypes = argumentTypes;
         retType = returnType;
     }
 
-    public FConstructorSignature(ImmutableList<TypeFExp> argumentTypes, TypeFExp returnType) {
+    public FConstructorSignature(ImmutableList<FTypeVar> argumentTypes, FTypeVar returnType) {
         argTypes = new FArgumentSignature(argumentTypes);
         retType = returnType;
     }
 
-    public FConstructorSignature(TypeFExp argumentType) {
+    public FConstructorSignature(FTypeVar argumentType) {
         argTypes = new FArgumentSignature(argumentType);
     }
 
@@ -28,11 +28,11 @@ public class FConstructorSignature {
         return argTypes;
     }
 
-    public ImmutableList<TypeFExp> getArgumentTypes() {
+    public ImmutableList<FTypeVar> getArgumentTypes() {
         return argTypes.getArgumentTypes();
     }
 
-    public TypeFExp getReturnType() {
+    public FTypeVar getReturnType() {
         return retType;
     }
     

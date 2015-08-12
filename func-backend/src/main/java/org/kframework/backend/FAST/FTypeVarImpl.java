@@ -4,22 +4,23 @@ package org.kframework.backend.FAST;
 /**
  * @author Sebastian Conybeare
  */
-public class VarFPattern extends FPattern {
+public class FTypeVarImpl extends FTypeVar {
 
-    private final FVariable var;
+    private final FTypeName name;
 
-    public VarFPattern(FTarget target) {
+    public FTypeVarImpl(FTarget target) {
         super(target);
-        var = new FVariable(target);
+        name = new FTypeName(target);
     }
 
-    public FVariable getFVariable() {
-        return var;
+    @Override
+    public String getName() {
+        return name.toString();
     }
 
     @Override
     public String unparse() {
         return target.unparse(this);
     }
-
+    
 }

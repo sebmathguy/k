@@ -4,14 +4,21 @@ package org.kframework.backend.FAST;
 /**
  * @author Sebastian Conybeare
  */
-public abstract class FExp extends FASTNode {
+public abstract class FTypeVar extends FASTNode {
 
     protected final FTarget target;
 
-    protected FExp(FTarget target) {
+    protected FTypeVar(FTarget target) {
         super(target);
         this.target = target;
     }
-    
+
+    public abstract String getName();
+
     public abstract String unparse();
+
+    public boolean equals(FTypeVar other) {
+        return this.getName().equals(other.getName());
+    }
+
 }

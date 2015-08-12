@@ -4,21 +4,25 @@ package org.kframework.backend.FAST;
 import com.google.common.collect.ImmutableList;
 
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class FArgumentSignature {
 
-    private final ImmutableList<TypeFExp> argTypes;
+    private final ImmutableList<FTypeVar> argTypes;
 
-    public FArgumentSignature(ImmutableList<TypeFExp> argumentTypes) {
+    public FArgumentSignature(ImmutableList<FTypeVar> argumentTypes) {
         argTypes = argumentTypes;
     }
 
-    public FArgumentSignature(TypeFExp argumentType) {
+    public FArgumentSignature() {
+        argTypes = ImmutableList.of();
+    }
+
+    public FArgumentSignature(FTypeVar argumentType) {
         argTypes = ImmutableList.of(argumentType);
     }
 
-    public ImmutableList<TypeFExp> getArgumentTypes() {
+    public ImmutableList<FTypeVar> getArgumentTypes() {
         return argTypes;
     }
 

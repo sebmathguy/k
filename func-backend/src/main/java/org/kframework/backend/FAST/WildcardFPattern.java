@@ -2,12 +2,17 @@
 package org.kframework.backend.FAST;
 
 /**
- * @author: Sebastian Conybeare
+ * @author Sebastian Conybeare
  */
 public class WildcardFPattern extends FPattern {
 
     public WildcardFPattern(FTarget target) {
         super(target);
+    }
+
+    @Override
+    public String unparse() {
+        return target.unparse(this);
     }
 
 }

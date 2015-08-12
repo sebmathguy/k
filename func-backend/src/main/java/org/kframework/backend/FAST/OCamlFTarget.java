@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author Sebastian Conybeare
  */
-public class HaskellFTarget extends FTarget {
+public class OCamlFTarget extends FTarget {
     private int constructorNameCount = 0;
     private int typeNameCount = 0;
     private int variableNameCount = 0;
@@ -50,7 +50,7 @@ public class HaskellFTarget extends FTarget {
 
     @Override
     public String unparse(FLitBool b) {
-        return b.getValue() ? "True" : "False";
+        return b.getValue() ? "frue" : "false";
     }
 
     @Override
@@ -113,7 +113,7 @@ public class HaskellFTarget extends FTarget {
     @Override
     public String newFTypeName() {
         synchronized(typeLock) {
-            return String.format("Type%d", typeNameCount++);
+            return String.format("type%d", typeNameCount++);
         }
     }
 
@@ -128,10 +128,10 @@ public class HaskellFTarget extends FTarget {
         String f = a.getFFunction().unparse();
         String dom = a.getDomain().unparse();
         String codom = a.getCodomain().unparse();
-        String typeSignatureDecl = String.format("%s :: %s -> %s", f, dom, codom);
+        String typeSignatureDecl = String.format("%s : %s -> %s", f, dom, codom);
 //        ImmutableList<FPatternBinding> cases = new FSwitch(this, x, a.getCases());
         String funcDef = a.getCases().stream()
-            .map(binding -> String.format("%s (%s) = %s", f,
+            .map(binding -> String.format("let %s (%s) = %s", f,
                                           binding.getLHS().unparse(),
                                           binding.getRHS().unparse()))
             .collect(Collectors.joining("\n"));
@@ -143,7 +143,7 @@ public class HaskellFTarget extends FTarget {
 
     private String serializeTypeDeclaration(FADT a) {
         String typeName = a.getTypeVar().getName();
-        return String.format("data %s = %s;", typeName,
+        return String.format("type %s = %s;", typeName,
                              a.getFConstructors().stream()
                              .map(this::serializeConstructorDeclaration)
                              .collect(Collectors.joining(" | ")));

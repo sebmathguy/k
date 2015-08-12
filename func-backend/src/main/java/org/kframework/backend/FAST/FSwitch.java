@@ -2,28 +2,29 @@
 package org.kframework.backend.FAST;
 
 import com.google.common.collect.ImmutableList;
-/**
- * @author: Sebastian Conybeare
- */
-public class FMatch extends FExp {
 
+/**
+ * @author Sebastian Conybeare
+ */
+public class FSwitch extends FExp {
+
+    private final FExp arg;
     private final ImmutableList<FPatternBinding> cases;
 
-    public FMatch(FTarget target, ImmutableList<FPatternBinding> cases) {
+    public FSwitch(FTarget target, FExp arg, ImmutableList<FPatternBinding> cases) {
         super(target);
+        this.arg = arg;
         this.cases = cases;
     }
 
-    public FMatch(FTarget target, FPatternBinding... cases) {
-        super(target);
-        this.cases = ImmutableList.copyOf(cases);
+    public FExp getArgument() {
+        return arg;
     }
 
     public ImmutableList<FPatternBinding> getCases() {
         return cases;
     }
 
-    @Override
     public String unparse() {
         return target.unparse(this);
     }
